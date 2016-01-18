@@ -27,7 +27,7 @@ class LessonWord extends Migration
                     ->references('id')->on('words')
                     ->onDelete('cascade');
             $table->string('answer');
-            $table->enum('result', ['0','1'])->default('0');
+            $table->enum('result', ['0', '1'])->default('0');
             $table->timestamps();
         });
     }
