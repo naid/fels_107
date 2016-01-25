@@ -4816,6 +4816,10 @@ a.thumbnail.active {
     background-color: #ffffff;
     border: 1px solid #dddddd;
 }
+.thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+}
 .list-group-item:first-child {
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;

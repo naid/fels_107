@@ -10,10 +10,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
     public function index()
     {
         $title = trans('common.users.page_title');
-        $user = \Auth::user();
-        return view('home', compact('title', 'user'));
+        return view('home', ['user' => $this->user, 'title' => $title]);
     }
 }
+
