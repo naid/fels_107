@@ -64,7 +64,7 @@ class CategoryController extends Controller
         $this->validate($request, [
             'category_name' => 'required|max:255',
             'category_desc' => 'required',
-            'category_image' => 'required|mimes:jpg,jpeg,gif,png',
+            'category_image' => 'mimes:jpg,jpeg,gif,png',
         ]);
         $category = Category::find(intval($id));
         $category->assign($request);

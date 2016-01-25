@@ -21,7 +21,7 @@
                         </p>
                     </td>
                     <td>
-                         <p><h3><u>{{ $category->name }}</u></h3></p>
+                         <p><h3><u>{{ $category->name }}</u></h3> (No. of Words added to this category: {{ $category->getCountWords() }})</p>
                     </td>
                 </tr>
                 <tr>

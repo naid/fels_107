@@ -38,10 +38,10 @@
                         </li>
                         @if ((!auth()->guest()) && ($user->isAdmin()))
                             <li>
-                                <a href="{{ url('/') }}">Words</a>
+                                {!! link_to('words/', 'Words') !!}
                             </li>
                             <li>
-                                <a href="{{ url('categories/') }}">Categories</a>
+                                {!! link_to('categories/', 'Categories') !!}
                             </li>
                         @endif
                     </ul>
@@ -49,20 +49,20 @@
                     <ul class="nav navbar-nav navbar-right">
                         @if (auth()->guest())
                         <li>
-                            <a href="{{ url('/auth/login') }}">Login</a>
+                            {!! link_to('auth/login/', 'Login') !!}
                         </li>
                         <li>
-                            <a href="{{ url('/auth/register') }}">Register</a>
+                            {!! link_to('auth/register/', 'Register') !!}
                         </li>
                         @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ auth()->user()->name }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="{{ url('/user/' . auth()->id()) }}">My Profile</a>
+                                    {!! link_to('user/' . auth()->id(), 'My Profile') !!}
                                 </li>
                                 <li>
-                                    <a href="{{ url('/auth/logout') }}">Logout</a>
+                                    {!! link_to('/auth/logout', 'Logout') !!}
                                 </li>
                             </ul>
                         </li>
