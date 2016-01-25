@@ -6,5 +6,9 @@ return [
     ],
     'users' => [
         'page_title' => 'Title',
+        'home' => [
+            'panel_label' => 'Title',
+            'home' => 'Title',
+        ],
     ],
 ];

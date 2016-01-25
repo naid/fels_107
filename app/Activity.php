@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
@@ -20,9 +21,8 @@ class Activity extends Model
         return $this->belongsTo(Lesson::class, 'lesson_id');
     }
 
-    public function getActivities()
+    public function getAllUserActivities()
     {
-        $activities = Activity::with('lesson')->where('user_id', Auth::getAuthIdentifier())->get();
-        return $activities;
+        return Activity::where('user_id', Auth::id())->get();
     }
 }

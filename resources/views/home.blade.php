@@ -1,23 +1,14 @@
 @extends('app')
 
 @section('title')
-    @if (auth()->guest())
-        Welcome!
-    @endif
-    @if (auth()->check())
-        Welcome {{ $title }}!
-    @endif
+    {{ trans('common.users.home.panel_label') }}
 @endsection
 
 @section('content')
-    @if (auth()->check())
-        @if ($user->isAdmin())
-            Admin
-        @endif
             <div class="panel-heading">Dashboard</div>
             <div class="panel-body">
                 <div class="col-md-3">
-                    <h4 align="center">{{ auth()->user()->name }} </h4>
+                    <h4 align="center">{{ $user->email }} </h4>
                 </div>
                 <div class="col-md-9">
                     <a href="{{ url('/words') }}" class="btn btn-default btn-lg" role="button">Word</a>
@@ -26,5 +17,4 @@
                     <hr>
                 </div>
             </div>
-    @endif
 @endsection
