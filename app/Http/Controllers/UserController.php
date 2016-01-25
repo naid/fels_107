@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
+use App\Activity;
+use App\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Redirect;
-
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -14,7 +14,16 @@ class UserController extends Controller
     public function index()
     {
         $title = trans('common.users.page_title');
-        return view('home', ['user' => $this->user, 'title' => $title]);
+
+        $activity = new Activity;
+
+        $activities = $activity->getAllUserActivities();
+
+        $view = ($this->user->isAdmin()) ? 'home' : 'users.home';
+        return view($view, [
+            'user' => $this->user,
+            'activities' => $activities,
+            'title' => $title . $this->user->id,
+        ]);
     }
 }
-
