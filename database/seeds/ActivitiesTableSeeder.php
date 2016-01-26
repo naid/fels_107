@@ -17,7 +17,7 @@ class ActivitiesTableSeeder extends Seeder
             [
                 'user_id' => 1,
                 'lesson_id' => 1,
-                'activity' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'activity' => $this->generateRandomString($length),
                 'type' => 1,
                 'created_at' => date('Y-m-d G:i:s'),
                 'updated_at' => date('Y-m-d G:i:s'),
@@ -25,7 +25,7 @@ class ActivitiesTableSeeder extends Seeder
             [
                 'user_id' => 2,
                 'lesson_id' => 2,
-                'activity' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'activity' => $this->generateRandomString($length),
                 'type' => 1,
                 'created_at' => date('Y-m-d G:i:s'),
                 'updated_at' => date('Y-m-d G:i:s'),
@@ -33,7 +33,47 @@ class ActivitiesTableSeeder extends Seeder
             [
                 'user_id' => 2,
                 'lesson_id' => 3,
-                'activity' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'activity' => $this->generateRandomString($length),
+                'type' => 1,
+                'created_at' => date('Y-m-d G:i:s'),
+                'updated_at' => date('Y-m-d G:i:s'),
+            ],
+            [
+                'user_id' => 3,
+                'lesson_id' => 3,
+                'activity' => $this->generateRandomString($length),
+                'type' => 1,
+                'created_at' => date('Y-m-d G:i:s'),
+                'updated_at' => date('Y-m-d G:i:s'),
+            ],
+            [
+                'user_id' => 4,
+                'lesson_id' => 3,
+                'activity' => $this->generateRandomString($length),
+                'type' => 1,
+                'created_at' => date('Y-m-d G:i:s'),
+                'updated_at' => date('Y-m-d G:i:s'),
+            ],
+            [
+                'user_id' => 3,
+                'lesson_id' => 3,
+                'activity' => $this->generateRandomString($length),
+                'type' => 1,
+                'created_at' => date('Y-m-d G:i:s'),
+                'updated_at' => date('Y-m-d G:i:s'),
+            ],
+            [
+                'user_id' => 3,
+                'lesson_id' => 3,
+                'activity' => $this->generateRandomString($length),
+                'type' => 1,
+                'created_at' => date('Y-m-d G:i:s'),
+                'updated_at' => date('Y-m-d G:i:s'),
+            ],
+            [
+                'user_id' => 5,
+                'lesson_id' => 3,
+                'activity' => $this->generateRandomString($length),
                 'type' => 1,
                 'created_at' => date('Y-m-d G:i:s'),
                 'updated_at' => date('Y-m-d G:i:s'),
@@ -41,5 +81,10 @@ class ActivitiesTableSeeder extends Seeder
         ];
 
         DB::table('activities')->insert($activityData);
+    }
+
+    protected function generateRandomString($length)
+    {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , .", 0, $length);
     }
 }

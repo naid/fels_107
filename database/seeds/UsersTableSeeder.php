@@ -28,7 +28,19 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'bbb',
                 'email' => 'bbb@aaa.com',
-                'password' => bcrypt('bbb'),
+                'password' => bcrypt('aaa'),
+                'type' => 'user',
+            ],
+            [
+                'name' => 'ccc',
+                'email' => 'ccc@aaa.com',
+                'password' => bcrypt('aaa'),
+                'type' => 'user',
+            ],
+            [
+                'name' => 'ddd',
+                'email' => 'ddd@aaa.com',
+                'password' => bcrypt('aaa'),
                 'type' => 'user',
             ],
         ];

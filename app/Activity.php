@@ -21,8 +21,16 @@ class Activity extends Model
         return $this->belongsTo(Lesson::class, 'lesson_id');
     }
 
-    public function getAllUserActivities()
+    public function getAllUserActivities($userId)
     {
-        return Activity::where('user_id', Auth::id())->get();
+        return Activity::where('user_id', $userId)->get();
+    }
+
+    public function getUserFolloweeActivities($userId)
+    {
+        $followeeIds = Follow::where('follower_id', $userId)->lists('followee_id');
+        $activities = Activity::with('user')->whereIn('user_id', $followeeIds)->get();
+
+        return $activities;
     }
 }
