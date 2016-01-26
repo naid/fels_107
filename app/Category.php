@@ -44,4 +44,8 @@ class Category extends Model
         $this->save();
     }
 
+    public function getCountWords()
+    {
+        return $this->words()->count();
+    }
 }
