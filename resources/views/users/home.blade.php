@@ -19,7 +19,7 @@
                     !!}
                 </div>
                 <div class="panel-footer text-center">
-                    <span>Update Profile</span>
+                    {!! link_to_route('users.edit', 'Update Profile') !!}
                 </div>
             </div>
         </div>
