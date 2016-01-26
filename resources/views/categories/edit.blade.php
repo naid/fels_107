@@ -3,7 +3,7 @@
     {{ $title }}
 @endsection
 @section('content')
-    {!! Form::open(['method' => 'patch', 'route' => ['categories.update', $category->id], 'files' => 'true']) !!}
+    {!! Form::open(['method' => 'patch', 'route' => ['categories.edit', $category->id], 'files' => 'true']) !!}
         <table>
             <tr>
                 <td rowspan='3'>
