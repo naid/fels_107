@@ -34,12 +34,17 @@ class Lesson extends Model
         return $this->hasOne(Activity::class, 'lesson_id');
     }
 
-    public function generateLessonWords()
+    public function getLearnedWords($userId)
     {
-        $learnedWords = LessonWord::where('answer', '!=', '')
+        return LessonWord::where('answer', '!=', '')
             ->whereNotNull('answer')
-            ->where('user_id', $this->user_id)
+            ->where('user_id', $userId)
             ->lists('word_id');
+    }
+
+    public function generateLessonWords($userId)
+    {
+        $learnedWords = Lesson::getLearnedWords($userId);
         $lessonWords = Word::with('lessonWords')
             ->where('category_id', $this->category_id)
             ->whereNotIn('id', $learnedWords)
@@ -51,7 +56,7 @@ class Lesson extends Model
             $lessonWordsToInsert[] = [
                 'lesson_id' => $this->id,
                 'word_id' => $lessonWord->id,
-                'user_id' => $this->user_id,
+                'user_id' => $userId,
             ];
         }
         try {

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Events\FinishLesson;
 use App\Http\Controllers\Controller;
 use App\Lesson;
 use App\LessonWord;
