@@ -20,9 +20,25 @@ class UserController extends Controller
 
         $activity = new Activity;
 
-        $activities = $activity->getAllUserActivities();
+        $activities = $activity->getAllUserActivities($this->user->id);
 
         $view = ($this->user->isAdmin()) ? 'home' : 'users.home';
+        return view($view, [
+            'user' => $this->user,
+            'activities' => $activities,
+            'title' => $title . $this->user->id,
+        ]);
+    }
+
+    public function activities()
+    {
+        $title = trans('common.users.page_title');
+
+        $activity = new Activity;
+
+        $activities = $activity->getUserFolloweeActivities($this->user->id);
+
+        $view = ($this->user->isAdmin()) ? 'home' : 'users.view_activities';
         return view($view, [
             'user' => $this->user,
             'activities' => $activities,
@@ -41,7 +57,6 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $user = User::findOrFail(intval($this->user->id));
-
         $validate = [
             'user_name' => 'required|max:255',
             'user_email' => 'required|max:255',
@@ -63,11 +78,6 @@ class UserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        //note to Tung: This is the problem I consulted with you before.
-        //I made it in such a way that the old password message and the new passwords mismatch message will
-        //be displayed to the User and also to avoid using emails for now to make it simple :)
-        //I guess I need your advice on what to do with this or if this is acceptable enough.
-        //I will remove this comment on the next pull. Thank you very much Tung :-)
         $user = User::findOrFail(intval($this->user->id));
 
         $validate = [

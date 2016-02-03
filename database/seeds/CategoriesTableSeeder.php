@@ -17,20 +17,25 @@ class CategoriesTableSeeder extends Seeder
             [
                 'name' => 'Category 1',
                 'image' => '',
-                'description' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'description' => $this->generateRandomString($length),
             ],
             [
                 'name' => 'Category 2',
                 'image' => '',
-                'description' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'description' => $this->generateRandomString($length),
             ],
             [
                 'name' => 'Category 3',
                 'image' => '',
-                'description' => substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , ."), 0, $length),
+                'description' => $this->generateRandomString($length),
             ],
         ];
 
         DB::table('categories')->insert($categoryData);
     }
+
+    protected function generateRandomString($length)
+    {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ , .", 0, $length);
+    }    
 }
