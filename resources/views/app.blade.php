@@ -34,7 +34,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="{{ url('/') }}">Home</a>
+                            {!! link_to('/home', 'Home') !!}
                         </li>
                         @if ((!auth()->guest()) && ($user->isAdmin()))
                             <li>
@@ -44,28 +44,30 @@
                                 {!! link_to('categories/', 'Categories') !!}
                             </li>
                         @endif
+                        <li>
+                            {!! link_to('users/list', 'Users') !!}
+                        </li>
                     </ul>
-
                     <ul class="nav navbar-nav navbar-right">
                         @if (auth()->guest())
-                        <li>
-                            {!! link_to('auth/login/', 'Login') !!}
-                        </li>
-                        <li>
-                            {!! link_to('auth/register/', 'Register') !!}
-                        </li>
+                            <li>
+                                {!! link_to('auth/login/', 'Login') !!}
+                            </li>
+                            <li>
+                                {!! link_to('auth/register/', 'Register') !!}
+                            </li>
                         @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ auth()->user()->name }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    {!! link_to('user/' . auth()->id(), 'My Profile') !!}
-                                </li>
-                                <li>
-                                    {!! link_to('/auth/logout', 'Logout') !!}
-                                </li>
-                            </ul>
-                        </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ auth()->user()->name }} <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        {!! link_to('user/' . auth()->id(), 'My Profile') !!}
+                                    </li>
+                                    <li>
+                                        {!! link_to('/auth/logout', 'Logout') !!}
+                                    </li>
+                                </ul>
+                            </li>
                         @endif
                     </ul>
                 </div>

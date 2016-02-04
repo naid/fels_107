@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use App\Auth;
+use App\Follow;
 use App\Http\Controllers\Controller;
 use App\User;
 use Hash;
@@ -94,6 +95,33 @@ class UserController extends Controller
         Session::flash('message', 'Password changed.');
 
         return redirect('/home');
+    }
+
+    public function listUsers()
+    {
+        $users = User::where('id', '!=', $this->user->id)->get();
+        $follows = Follow::where('follower_id', $this->user->id)->lists('followee_id');
+
+        return view('users.list', [
+            'usersList' => $users,
+            'follows' => $follows->toArray(),
+        ]);
+    }
+
+    public function followUser($userId)
+    {
+        $follow = new Follow;
+        $follow->addFollowee($this->user->id, $userId);
+
+        return redirect('/users/list');
+    }
+
+    public function unFollowUser($userId)
+    {
+        $follow = new Follow;
+        $follow->removeFollowee($this->user->id, $userId);
+
+        return redirect('/users/list');
     }
 
 }
