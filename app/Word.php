@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Word extends Model
 {
+    const TITLE = 'Words';
+    const STATUS_LEARNED = 'learned';
+    const STATUS_UNLEARNED = 'unlearned';
+    const STATUS_ALL = 'all';
+    const NUMBER_WORDS = 10;
+
     protected $guarded = [];
 
     protected $fillable = ['word', 'meaning', 'sound', 'options', 'category_id'];

@@ -3,6 +3,22 @@
     {{ $title }}
 @endsection
 @section('content')
+    {!! Form::open(['method' => 'get', 'route' => ['words.index']]) !!}
+        {!!
+            Form::select(
+                'category',
+                ['all' => App\Word::STATUS_ALL] + $categories->toArray(),
+                $categoryId
+            )
+        !!}
+        {!! Form::radio('status', 'learned', $status == App\Word::STATUS_LEARNED) !!}
+        {!! Form::label('learned', 'Learned') !!}
+        {!! Form::radio('status', 'unlearned', $status == App\Word::STATUS_UNLEARNED) !!}
+        {!! Form::label('unlearned', 'Not Learned') !!}
+        {!! Form::radio('status', 'all', $status == App\Word::STATUS_ALL) !!}
+        {!! Form::label('all', 'All') !!}
+        {!! Form::submit('Filter') !!}
+    {!! Form::close() !!}
     @if ($user->isAdmin())
         <p>
             {!! link_to_route('words.create', 'Add new word') !!}
@@ -38,5 +54,5 @@
         </div>
     </div>
     @endforeach
-    {{ $words->render() }}
+    {!! $words->render() !!}
 @endsection

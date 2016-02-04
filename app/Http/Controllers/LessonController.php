@@ -35,7 +35,7 @@ class LessonController extends Controller
             session()->flash('maxQuestions', 0);
             $lesson = new Lesson;
             $lesson->setLesson($this->user->id, $request->category_id);
-            if ($lesson->generateLessonWords()) {
+            if ($lesson->generateLessonWords($this->user->id)) {
                 session()->flash('lessonId', $lesson->id);
                 return redirect('exam');
             }

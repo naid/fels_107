@@ -3,13 +3,23 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Lesson;
 use App\User;
 use App\Word;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Session;
 
 class WordController extends Controller
 {
+    protected $categories;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->categories = Category::lists('name', 'id');
+    }
+
     protected function checkWord($request)
     {
         return $this->validate($request, [
@@ -22,21 +32,64 @@ class WordController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $words = Word::with('category')->paginate(20);
+        if (!empty($request->input('category'))) {
+            $learnedWords = new Lesson;
+            $categoryId = $request->input('category');
+            switch ($categoryId) {
+                case Word::STATUS_ALL:
+                    $currentCategoryWordIds = Word::with('category')
+                        ->lists('id');
+                    break;
+                default:
+                    $currentCategoryWordIds = Word::with('category')
+                        ->where('category_id', $categoryId)
+                        ->lists('id');
+                    break;
+            }
+            $wordQueryBuilder = Word::with('category')
+                ->whereIn('id', $currentCategoryWordIds);
+
+            switch ($request->input('status')) {
+                case Word::STATUS_LEARNED:
+                    $wordQueryBuilder->whereIn('id', $learnedWords->getLearnedWords($this->user->id));
+                    break;
+                case Word::STATUS_UNLEARNED:
+                    $wordQueryBuilder->whereNotIn('id', $learnedWords->getLearnedWords($this->user->id));
+                    break;
+                default:
+                    break;
+            }
+
+            $words = $wordQueryBuilder->paginate(Word::NUMBER_WORDS);
+
+            return view('words.index', [
+                'user' => $this->user,
+                'categories' => $this->categories,
+                'words' => $words,
+                'title' => Word::TITLE,
+                'status' => $request->input('status'),
+                'categoryId' => $categoryId,
+            ]);
+        }
+
+        $words = Word::with('category')
+            ->paginate(Word::NUMBER_WORDS);
         return view('words.index', [
-            'words' => $words,
             'user' => $this->user,
-            'title' => 'Words',
+            'categories' => $this->categories,
+            'words' => $words,
+            'title' => Word::TITLE,
+            'status' => Word::STATUS_ALL,
+            'categoryId' => Word::STATUS_ALL,
         ]);
     }
 
     public function create()
     {
-        $categories = Category::lists('name', 'id');
         return view('words.create', [
-            'categories' => $categories,
+            'categories' => $this->categories,
             'user' => $this->user,
             'title' => 'Words',
         ]);
@@ -48,9 +101,9 @@ class WordController extends Controller
             $this->checkWord($request);
             $word = new Word;
             $word->assign($request);
-            \Session::flash('flash_success', 'Word creation successful!');
+            session()->flash('flash_success', 'Word creation successful!');
         } catch (Exception $e) {
-            \Session::flash('flash_error', 'Word creation failed.');
+            session()->flash('flash_error', 'Word creation failed.');
         }
         return redirect('/words');
     }
@@ -59,17 +112,16 @@ class WordController extends Controller
     {
         try {
             $word = Word::findOrFail($id);
-            $categories = Category::lists('name', 'id');
             $optionArray = explode(";", $word->options);
             return view('words.edit', [
                 'word' => $word,
-                'category' => $categories,
+                'category' => $this->categories,
                 'title' => 'Edit word',
                 'user' => $this->user,
                 'options' => $optionArray,
             ]);
         } catch (ModelNotFoundException $e) {
-            \Session::flash('flash_error', 'Edit failed. The word cannot be found.');
+            session()->flash('flash_error', 'Edit failed. The word cannot be found.');
         }
         return redirect('/words');
     }
@@ -80,9 +132,9 @@ class WordController extends Controller
             $this->checkWord($request);
             $word = Word::findOrFail($id);
             $word->assign($request);
-            \Session::flash('flash_success', 'Update successful!');
+            session()->flash('flash_success', 'Update successful!');
         } catch (ModelNotFoundException $e) {
-            \Session::flash('flash_error', 'Update failed. The word cannot be found.');
+            session()->flash('flash_error', 'Update failed. The word cannot be found.');
         }
         return redirect('/words');
     }
@@ -92,9 +144,9 @@ class WordController extends Controller
         try {
             $word = Word::findOrFail($id);
             $word->delete();
-            \Session::flash('flash_success', 'Delete successful!');
+            session()->flash('flash_success', 'Delete successful!');
         } catch (ModelNotFoundException $e) {
-            \Session::flash('flash_error', 'Delete failed. The word cannot be found.');
+            session()->flash('flash_error', 'Delete failed. The word cannot be found.');
         }
         return redirect('/words');
     }
