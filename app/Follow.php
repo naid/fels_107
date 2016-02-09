@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Follow extends Model
 {
+    const STATUS_FOLLOWED = 'followed';
+    const STATUS_NOT_FOLLOWED = 'notfollowed';
+    const STATUS_ALL = 'all';
+
     protected $guarded = [];
 
     protected $fillable = ['follower_id', 'followee_id'];
@@ -32,5 +36,12 @@ class Follow extends Model
     {
         $followEntry = Follow::where('followee_id', $followeeId)->where('follower_id', $userId);
         $followEntry->delete();
+    }
+
+    public function getFollowedByUser($userId)
+    {
+        $followeeIds = Follow::where('follower_id', $userId)->lists('followee_id');
+
+        return $followeeIds;
     }
 }

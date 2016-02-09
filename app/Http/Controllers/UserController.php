@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use App\Auth;
+use App\Events\ActivityEvent;
 use App\Follow;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -14,6 +15,10 @@ use Session;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function index()
     {
@@ -97,29 +102,87 @@ class UserController extends Controller
         return redirect('/home');
     }
 
-    public function listUsers()
+    public function listUsers(Request $request)
     {
         $users = User::where('id', '!=', $this->user->id)->get();
         $follows = Follow::where('follower_id', $this->user->id)->lists('followee_id');
 
         return view('users.list', [
             'usersList' => $users,
+            'status' => Follow::STATUS_ALL,
+            'follows' => $follows->toArray(),
+        ]);
+    }
+
+    public function filterUsers(Request $request)
+    {
+
+        $follow = new Follow;
+        $followeeIds = $follow->getFollowedByUser($this->user->id);
+
+        $users = new User;
+
+        switch ($request->input('status')) {
+            case 'followed':
+                $users = $users->whereIn('id', $followeeIds);
+                break;
+            case 'notfollowed':
+                $users = $users->whereNotIn('id', $followeeIds);
+                break;
+            default:
+                break;
+        }
+
+        $useInput = $request->input('user');
+
+        $users = $users->where(
+
+            function ($q) use ($useInput) {
+                return $q->where('name', 'LIKE', "%$useInput%")
+                    ->orWhere('email', 'LIKE', "%$useInput%")->get();
+            }
+
+        )->get();
+
+        $follows = Follow::where('follower_id', $this->user->id)->lists('followee_id');
+
+        return view('users.list', [
+            'usersList' => $users,
+            'status' => $request->input('status'),
             'follows' => $follows->toArray(),
         ]);
     }
 
     public function followUser($userId)
     {
+        $followee = User::findorFail(intval($userId));
         $follow = new Follow;
-        $follow->addFollowee($this->user->id, $userId);
+        $follow->addFollowee($this->user->id, $followee->id);
+
+        $eventData = [
+            'userId' => $this->user->id,
+            'activity' => $this->user->name . " followed " . $followee->name,
+            'lessonId' => User::NO_LESSONID,
+            'type' => User::FOLLOW_ACTIVITY,
+        ];
+        \Event::fire(new ActivityEvent($eventData));
 
         return redirect('/users/list');
     }
 
     public function unFollowUser($userId)
     {
+        $followee = User::findorFail(intval($userId));
         $follow = new Follow;
-        $follow->removeFollowee($this->user->id, $userId);
+        $follow->removeFollowee($this->user->id, $followee->id);
+
+        $eventData = [
+            'userId' => $this->user->id,
+            'activity' => $this->user->name . " unfollowed " . $followee->name,
+            'lessonId' => User::NO_LESSONID,
+            'type' => User::FOLLOW_ACTIVITY,
+        ];
+        \Event::fire(new ActivityEvent($eventData));
 
         return redirect('/users/list');
     }

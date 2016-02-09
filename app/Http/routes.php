@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/update-password', ['as' => 'users.update.password', 'uses' => 'UserController@updatePassword']);
 
     Route::get('/users/list', ['as' => 'users.list', 'uses' => 'UserController@listUsers']);
+    Route::get('/users/filter', ['as' => 'users.filter', 'uses' => 'UserController@filterUsers']);
+
     Route::get('/follow/{id}', ['as' => 'user.follow', 'uses' => 'UserController@followUser']);
     Route::get('/unfollow/{id}', ['as' => 'user.unfollow', 'uses' => 'UserController@unFollowUser']);
 

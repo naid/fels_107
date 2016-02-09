@@ -33,4 +33,13 @@ class Activity extends Model
 
         return $activities;
     }
+
+    public function setActivity($data)
+    {
+        $this->user_id = $data['userId'];
+        $this->lesson_id = $data['lessonId'];
+        $this->activity = $data['activity'];
+        $this->type = $data['type'];
+        $this->save();
+    }
 }
